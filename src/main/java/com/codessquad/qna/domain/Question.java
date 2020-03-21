@@ -47,4 +47,8 @@ public class Question {
                 ", contents='" + contents + '\'' +
                 '}';
     }
+
+    public boolean isSameId(Long questionId) {
+        return this.id.equals(questionId);
+    }
 }
