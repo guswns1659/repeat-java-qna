@@ -4,6 +4,7 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default content-main">
             <form action="/users/{{user.id}}" method="post" name="update">
+                <input name="_method" type="hidden" value="PUT"/>
                 <div class="form-group">
                     <label for="newPassword">새 비밀번호</label>
                     <input class="form-control" id="newPassword" name="newPassword" placeholder="User ID">
