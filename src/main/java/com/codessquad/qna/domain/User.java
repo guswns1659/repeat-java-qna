@@ -1,10 +1,19 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, length = 50)
     private String userId;
+    @Column(nullable = false, length = 50)
     private String password;
+    @Column(nullable = false, length = 50)
     private String name;
+    @Column(nullable = false, length = 50)
     private String email;
 
     public Long getId() {

@@ -1,3 +1,4 @@
+# 개발 환경 구축 
 ## repeat-java-qna 저장소 생성하기 
 - 현재 java-qna 저장소가 1개 fork되어 있어서 새로운 원격저장소에 fork를 할 수 없는 상황. 우선 guswns1659/java-qna 의 master 브랜치만 클론하고 origin 주소를 guswns1659/java-qna -> guswns1659/repeat-java-qna로 변경할 예정.
 - 먼저 기존 origin 삭제하고 새롭게 추가.
@@ -35,3 +36,41 @@ The compile configuration has been deprecated for dependency declaration. This w
 - 원인) Caching issue' of IntelliJ IDE라고 한다. 
 - 방법1) File -> Invalidate Caches / Restrart 클릭 
 - 방법2) 문제가 계속된다면 gradle 폴더를 지우고 프로젝트를 끈다. 다시 켜면 gradle setup이 자동으 로된다. 
+
+# Step2 
+## h2 DB 설정 
+- 의존성 추가 : implementation group: 'com.h2database', name: 'h2', version: '1.4.197'
+- 다양한 설정 파일 application.properties에 추가 
+
+```java
+#h2 DB 설정 추가
+spring.datasource.url=jdbc:h2:mem://localhost/~/java-qna;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+
+#h2 DB 실행 쿼리 보기
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+#h2 DB 테이블 자동 생성
+spring.jpa.hibernate.ddl-auto=create-drop
+
+#h2 DB 접근 설정
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+```
+
+## h2 DB 버그 해결방법 : class h2.driver cannot resolve 
+- File -> invaildate Caches 클릭
+- build.gradle에서 dependencies 실행 -> console에서 h2 검색해보고 아래 명령어 나오면 compile -> implementation으로 바꾸기. 
+
+```java
+compile - Dependencies for source set 'main' (deprecated, use 'implementation' instead).
+\--- com.h2database:h2:1.4.192
+```
+
+## h2 @Entity 어노테이션 안될 때 -> java.persistence.*가 import 안될 때 
+- h2 버전 1.4.197로 하니까 안되서 1.4.192로 변경하니 된다.
