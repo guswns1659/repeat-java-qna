@@ -2,8 +2,10 @@ package com.codessquad.qna;
 
 import com.codessquad.qna.domain.UpdateUserDTO;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,18 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    private List<User> users = new ArrayList<>();
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("")
     public String users(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
@@ -34,28 +35,23 @@ public class UserController {
 
     @PostMapping("/create")
     public String create(User user) {
-        logger.info("user : {}", user);
-
-        user.setId((long) users.size() + 1);
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
-        for (User each : users) {
-            if (each.isSameUserId(userId)) model.addAttribute("user", each);
-        }
+        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+                new IllegalStateException("No User"));
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/updateForm")
     public ModelAndView updateForm(@PathVariable Long id, Model model) {
-        for (User each : users) {
-            if (each.isSameId(id)) {
-                model.addAttribute("user", each);
-            }
-        }
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new IllegalStateException("No User"));
+        model.addAttribute("user", user);
         return new ModelAndView("user/updateForm");
     }
 
@@ -67,12 +63,10 @@ public class UserController {
             return modelAndView;
         }
 
-        for (User each : users) {
-            if (each.isSameId(id)) {
-                each.update(updateUserDTO);
-                return modelAndView;
-            }
-        }
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new IllegalStateException("No User"));
+        user.update(updateUserDTO);
+        userRepository.save(user);
         return modelAndView;
     }
 }
