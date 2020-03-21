@@ -8,15 +8,17 @@
                 <div class="well well-sm">
                     <div class="media">
                         <a class="thumbnail pull-left" href="#">
-                            <img class="media-object" src="../../static/images/80-text.png">
+                            <img class="media-object" src="images/80-text.png">
                         </a>
+                        {{#user}}
                         <div class="media-body">
-                            <h4 class="media-heading">자바지기</h4>
+                            <h4 class="media-heading">{{name}}</h4>
                             <p>
                                 <a class="btn btn-xs btn-default" href="#"><span
-                                        class="glyphicon glyphicon-envelope"></span>&nbsp;javajigi@slipp.net</a>
+                                        class="glyphicon glyphicon-envelope"></span>{{email}}</a>
                             </p>
                         </div>
+                        {{/user}}
                     </div>
                 </div>
             </div>
