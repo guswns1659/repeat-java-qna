@@ -3,8 +3,8 @@ package com.codessquad.qna;
 import com.codessquad.qna.domain.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
@@ -16,8 +16,10 @@ public class HomeController {
     }
 
     @GetMapping("")
-    public String index(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "index";
+    public ModelAndView index(ModelAndView modelAndView) {
+        modelAndView.setViewName("index");
+        modelAndView.addObject("questions", questionRepository.findAll());
+//        modelAndView.addObject("user", questionRepository.findAll());
+        return modelAndView;
     }
 }

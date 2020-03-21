@@ -80,3 +80,13 @@ compile - Dependencies for source set 'main' (deprecated, use 'implementation' i
 
 ## Postman에서 error 발생할 때 
 - 종종 저장했던 request가 삭제되는 경우가 있는 것 같다. 사용자 회원정보 수정하는 요청을 저장했는데 사라져서 계속 에러가 발생함. 
+
+## Step3 
+### sessionedUser는 User 객체이다. id를 그대로 사용할 수 있다. 
+
+```java
+{{#sessionedUser}}
+<li><a href="#" role="button">로그아웃</a></li>
+<li><a href="/users/{{id}}/updateForm" role="button">개인정보수정</a></li>
+{{/sessionedUser}}
+```

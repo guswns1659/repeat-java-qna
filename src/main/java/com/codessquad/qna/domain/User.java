@@ -80,4 +80,16 @@ public class User {
         this.name = updateUserDTO.getName();
         this.email = updateUserDTO.getEmail();
     }
+
+    public boolean notMatchPassword(String password) {
+        return !this.password.equals(password);
+    }
+
+//    public boolean notMatchWith(User sessionedUser) {
+//        return !(this == sessionedUser);
+//    }
+
+    public boolean notMatchId(Long id) {
+        return !this.id.equals(id);
+    }
 }

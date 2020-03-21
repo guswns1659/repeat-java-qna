@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -48,9 +50,21 @@ public class UserController {
     }
 
     @GetMapping("/{id}/updateForm")
-    public ModelAndView updateForm(@PathVariable Long id, Model model) {
+    public ModelAndView updateForm(@PathVariable Long id,
+                                   Model model,
+                                   HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            return new ModelAndView("user/login_failed");
+        }
+
         User user = userRepository.findById(id).orElseThrow(() ->
                 new IllegalStateException("No User"));
+
+        if (sessionedUser.notMatchId(id)) {
+            return new ModelAndView("user/login_failed");
+        }
+
         model.addAttribute("user", user);
         return new ModelAndView("user/updateForm");
     }
@@ -60,8 +74,6 @@ public class UserController {
                                UpdateUserDTO updateUserDTO,
                                ModelAndView modelAndView) {
         modelAndView.setViewName("redirect:/users");
-
-        logger.info("updateUserDto : {}", updateUserDTO);
 
         if (updateUserDTO.isCheckFail()) {
             return modelAndView;
@@ -73,4 +85,25 @@ public class UserController {
         userRepository.save(user);
         return modelAndView;
     }
+
+    @GetMapping("/loginForm")
+    public ModelAndView loginForm() {
+        return new ModelAndView("user/login");
+    }
+
+    @PostMapping("/login")
+    public ModelAndView login(String userId, String password,
+                              HttpSession httpSession,
+                              ModelAndView modelAndView,
+                              Model model) {
+        User user = userRepository.findByUserId(userId).orElseThrow(() ->
+                new IllegalStateException("No User"));
+        if (user.notMatchPassword(password)) {
+            return new ModelAndView("user/login_failed");
+        }
+        modelAndView.setViewName("redirect:/");
+        httpSession.setAttribute("sessionedUser", user);
+        return modelAndView;
+    }
+
 }
