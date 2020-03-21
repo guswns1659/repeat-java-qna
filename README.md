@@ -74,3 +74,6 @@ compile - Dependencies for source set 'main' (deprecated, use 'implementation' i
 
 ## h2 @Entity 어노테이션 안될 때 -> java.persistence.*가 import 안될 때 
 - h2 버전 1.4.197로 하니까 안되서 1.4.192로 변경하니 된다.
+
+## ModelAndView vs Model 
+- 둘 다 사용해도 된다. 다만 Model이 조금 더 최신버전이다. 나는 ModelAndView를 선호한다. Ajax를 사용해보니 String으로만 넘기면 view를 제대로 못 보여주는 경우가 있었다. 

@@ -2,21 +2,25 @@ package com.codessquad.qna.domain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    public static List<Question> questions = new ArrayList<>();
     private Logger logger = LoggerFactory.getLogger(QuestionController.class);
+
+    private final QuestionRepository questionRepository;
+
+    @Autowired
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @GetMapping("/form")
     public String form() {
@@ -24,23 +28,23 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String create(Question question) {
+    public ModelAndView create(Question question) {
         logger.info("question : {} ", question);
-        question.setId((long) questions.size() + 1);
-        questions.add(question);
-        return "redirect:/";
+        questionRepository.save(question);
+        return new ModelAndView("redirect:/");
     }
 
     @GetMapping("/{questionId}")
-    public String show(@PathVariable Long questionId, Model model) {
-        for (Question each : questions) {
-            if (each.isSameId(questionId)) model.addAttribute("question", each);
-        }
-        return "question/show";
+    public ModelAndView show(@PathVariable Long questionId, ModelAndView modelAndView) {
+        Question question = questionRepository.findById(questionId).orElseThrow(() ->
+                new IllegalStateException("No Question"));
+        modelAndView.setViewName("question/show");
+        modelAndView.addObject("question", question);
+        return modelAndView;
     }
 
     @GetMapping("/updateForm")
-    public String updateForm() {
-        return "question/updateForm";
+    public ModelAndView updateForm() {
+        return new ModelAndView("question/updateForm");
     }
 }

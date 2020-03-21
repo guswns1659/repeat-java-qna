@@ -18,9 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/users")
 public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("")
     public String users(Model model) {
