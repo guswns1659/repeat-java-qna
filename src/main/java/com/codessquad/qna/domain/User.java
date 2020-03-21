@@ -61,4 +61,14 @@ public class User {
     public boolean isSameUserId(String userId) {
         return this.userId.equals(userId);
     }
+
+    public boolean isSameId(Long id) {
+        return this.id.equals(id);
+    }
+
+    public void update(UpdateUserDTO updateUserDTO) {
+        this.password = updateUserDTO.getNewPassword();
+        this.name = updateUserDTO.getName();
+        this.email = updateUserDTO.getEmail();
+    }
 }

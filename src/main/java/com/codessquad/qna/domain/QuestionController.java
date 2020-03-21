@@ -38,4 +38,9 @@ public class QuestionController {
         }
         return "question/show";
     }
+
+    @GetMapping("/updateForm")
+    public String updateForm() {
+        return "question/updateForm";
+    }
 }
