@@ -14,6 +14,16 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
+    public Question() {
+
+    }
+
+    public Question(String writer, String title, String contents) {
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+    }
+
     public Long getId() {
         return id;
     }

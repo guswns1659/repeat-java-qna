@@ -29,15 +29,21 @@ public class QuestionController {
     public ModelAndView form(HttpSession httpSession,
                              ModelAndView modelAndView) {
         modelAndView.setViewName("question/form");
-        if (HttpUtils.isNotLoginUser(httpSession)) {
-            return new ModelAndView("user/login_failed");
+        User user = HttpUtils.getSessionedUser(httpSession);
+        if (HttpUtils.isNotLoginUser(user)) {
+            return new ModelAndView("user/login");
         }
         return modelAndView;
     }
 
     @PostMapping("/create")
-    public ModelAndView create(Question question) {
-        logger.info("question : {} ", question);
+    public ModelAndView create(String title, String contents,
+                               HttpSession httpSession) {
+        User user = HttpUtils.getSessionedUser(httpSession);
+        if (HttpUtils.isNotLoginUser(user)) {
+            return new ModelAndView("user/login");
+        }
+        Question question = new Question(user.getName(), title, contents);
         questionRepository.save(question);
         return new ModelAndView("redirect:/");
     }

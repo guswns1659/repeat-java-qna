@@ -90,3 +90,6 @@ compile - Dependencies for source set 'main' (deprecated, use 'implementation' i
 <li><a href="/users/{{id}}/updateForm" role="button">개인정보수정</a></li>
 {{/sessionedUser}}
 ```
+
+## Entity를 생성자로 생성할 때 기본 생성자를 만들기 
+- Question 만들 때 기본 생성자도 만들어 놓기.     
