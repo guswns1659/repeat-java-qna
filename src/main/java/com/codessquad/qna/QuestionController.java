@@ -1,6 +1,9 @@
-package com.codessquad.qna.domain;
+package com.codessquad.qna;
 
-import com.codessquad.qna.HttpUtils;
+import com.codessquad.qna.domain.AnswerRepository;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +16,14 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    private final QuestionRepository questionRepository;
     private Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
-    }
+    private QuestionRepository questionRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
+
 
     @GetMapping("/form")
     public ModelAndView form(HttpSession httpSession,
@@ -39,7 +43,7 @@ public class QuestionController {
         if (HttpUtils.isNotLoginUser(user)) {
             return new ModelAndView("user/login");
         }
-        Question question = new Question(user.getName(), title, contents);
+        Question question = new Question(user, title, contents);
         questionRepository.save(question);
         return new ModelAndView("redirect:/");
     }
@@ -50,6 +54,7 @@ public class QuestionController {
                 new IllegalStateException("No Question"));
         modelAndView.setViewName("question/show");
         modelAndView.addObject("question", question);
+        modelAndView.addObject("answers", answerRepository.findAllByQuestionIdAndDeletedFalse(questionId));
         return modelAndView;
     }
 
