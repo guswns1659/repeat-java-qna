@@ -92,4 +92,25 @@ public class QuestionController {
         modelAndView.setViewName("redirect:/questions/{questionId}");
         return modelAndView;
     }
+
+    @DeleteMapping("/{questionId}")
+    public ModelAndView delete(@PathVariable Long questionId,
+                               ModelAndView modelAndView,
+                               HttpSession httpSession) {
+
+        User user = HttpUtils.getSessionedUser(httpSession);
+        if (HttpUtils.isNotLoginUser(user)) {
+            return new ModelAndView("user/login");
+        }
+        Question question = questionRepository.findById(questionId).orElseThrow(() ->
+                new IllegalStateException("No Question"));
+        if (question.isNotMatchedUser(user)) {
+            return new ModelAndView("user/login");
+        }
+
+        question.delete();
+        questionRepository.save(question);
+        modelAndView.setViewName("redirect:/");
+        return modelAndView;
+    }
 }

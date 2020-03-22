@@ -1,5 +1,8 @@
 package com.codessquad.qna.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +16,8 @@ public class Question {
     private String title;
     @Column(nullable = false)
     private String contents;
+    @Column
+    private boolean deleted;
 
     public Question() {
 
@@ -22,6 +27,15 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.deleted = false;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -58,12 +72,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 
     public boolean isSameId(Long questionId) {
@@ -77,5 +86,9 @@ public class Question {
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 }

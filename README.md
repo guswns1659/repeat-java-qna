@@ -93,3 +93,7 @@ compile - Dependencies for source set 'main' (deprecated, use 'implementation' i
 
 ## Entity를 생성자로 생성할 때 기본 생성자를 만들기 
 - Question 만들 때 기본 생성자도 만들어 놓기.     
+
+## nested-exception-is-java-lang-illegalargumentexception-not-a-managed-type-class 에러 뜰 때,
+- 상세 에러를 해석해보면 빈을 제대로 만들지 못했다. 의존성 주입을 제대로 못했다는 의미로 파악. 
+- 생성자로 주입하던 QuestionRepository를 @Autoweird로 변경. 
