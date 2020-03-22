@@ -1,5 +1,6 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/questions")
@@ -23,8 +26,13 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String form() {
-        return "question/form";
+    public ModelAndView form(HttpSession httpSession,
+                             ModelAndView modelAndView) {
+        modelAndView.setViewName("question/form");
+        if (HttpUtils.isNotLoginUser(httpSession)) {
+            return new ModelAndView("user/login_failed");
+        }
+        return modelAndView;
     }
 
     @PostMapping("/create")

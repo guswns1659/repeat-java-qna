@@ -106,4 +106,12 @@ public class UserController {
         return modelAndView;
     }
 
+    @GetMapping("logout")
+    public ModelAndView logout(HttpSession httpSession) {
+        httpSession.removeAttribute(HttpUtils.SESSIONED_ID);
+        // 쿠키 삭제하는 메서드.
+        httpSession.invalidate();
+        return new ModelAndView("redirect:/");
+    }
+
 }
