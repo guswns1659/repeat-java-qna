@@ -4,20 +4,16 @@ import com.codessquad.qna.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
 
-@Controller
-@RequestMapping("/questions/{questionId}/answers")
-public class AnswerController {
-    private Logger logger = LoggerFactory.getLogger(AnswerController.class);
+@RestController
+@RequestMapping("/api/questions/{questionId}/answers")
+public class ApiAnswerController {
+    private Logger logger = LoggerFactory.getLogger(ApiAnswerController.class);
 
     @Autowired
     private QuestionRepository questionRepository;
