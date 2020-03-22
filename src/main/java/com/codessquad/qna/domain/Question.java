@@ -69,4 +69,13 @@ public class Question {
     public boolean isSameId(Long questionId) {
         return this.id.equals(questionId);
     }
+
+    public boolean isNotMatchedUser(User user) {
+        return !this.writer.equals(user.getName());
+    }
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
 }
