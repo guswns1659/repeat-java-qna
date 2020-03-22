@@ -73,4 +73,12 @@ public class Answer {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
+
+    public boolean isNotMatchedUser(User user) {
+        return !(this.writer.getId().equals(user.getId()));
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
 }
